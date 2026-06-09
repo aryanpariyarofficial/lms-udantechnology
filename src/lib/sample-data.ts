@@ -211,6 +211,84 @@ export const SAMPLE_INSTRUCTORS = [
   { name: "Prerana Joshi", headline: "AI & Data Specialist", courses: 3, students: 1500 },
 ]
 
+export const HOME_STATS = [
+  { label: "Students", value: "12,400+" },
+  { label: "Courses", value: "45+" },
+  { label: "Tutorials", value: "120+" },
+  { label: "Certificates", value: "8,600+" },
+  { label: "Articles", value: "30+" },
+]
+
+export type SampleTutorial = {
+  title: string
+  category: string
+  level: string
+  duration: string
+  date: string
+}
+
+export const SAMPLE_TUTORIALS: SampleTutorial[] = [
+  {
+    title: "Build a Portfolio Website with HTML & CSS",
+    category: "Web Development",
+    level: "Beginner",
+    duration: "1h 12m",
+    date: "Jun 2, 2026",
+  },
+  {
+    title: "Master ChatGPT for Everyday Productivity",
+    category: "AI",
+    level: "All Levels",
+    duration: "48m",
+    date: "May 28, 2026",
+  },
+  {
+    title: "Design a Logo in Canva — Step by Step",
+    category: "Graphic Design",
+    level: "Beginner",
+    duration: "35m",
+    date: "May 20, 2026",
+  },
+  {
+    title: "Edit Reels & Shorts in CapCut",
+    category: "Video Editing",
+    level: "Beginner",
+    duration: "42m",
+    date: "May 14, 2026",
+  },
+  {
+    title: "Run Your First Facebook Ad Campaign",
+    category: "Digital Marketing",
+    level: "All Levels",
+    duration: "1h 05m",
+    date: "May 6, 2026",
+  },
+  {
+    title: "Python Basics — Variables & Loops",
+    category: "Programming",
+    level: "Beginner",
+    duration: "58m",
+    date: "Apr 30, 2026",
+  },
+]
+
+export type SampleStream = {
+  title: string
+  host: string
+  duration: string
+  date: string
+  tag: string
+}
+
+export const SAMPLE_STREAMS: SampleStream[] = [
+  { title: "Build a Full Website with AI — Live", host: "Aakash Sharma", duration: "1h 30m", date: "Jan 18, 2026", tag: "Web Dev" },
+  { title: "Freelancing in Nepal — Live Q&A", host: "Sneha Karki", duration: "55m", date: "Jan 10, 2026", tag: "Career" },
+  { title: "Design Trends 2026 — Live Talk", host: "Bishal Thapa", duration: "1h 12m", date: "Dec 28, 2025", tag: "Design" },
+  { title: "AI Tools Every Student Should Know", host: "Prerana Joshi", duration: "1h 02m", date: "Dec 20, 2025", tag: "AI" },
+  { title: "How I Got My First Client — Podcast", host: "Rojan Maharjan", duration: "48m", date: "Dec 12, 2025", tag: "Podcast" },
+  { title: "Web Development Roadmap 2026", host: "Aakash Sharma", duration: "1h 20m", date: "Dec 5, 2025", tag: "Web Dev" },
+]
+
 export const HOME_FAQS = [
   {
     q: "How do I pay for a course?",

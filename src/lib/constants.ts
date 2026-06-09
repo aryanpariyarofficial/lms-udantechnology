@@ -20,13 +20,13 @@ export const PAYMENT_INFO = {
   bankAccountHolder: process.env.NEXT_PUBLIC_BANK_ACCOUNT_HOLDER ?? "",
 } as const
 
-/** Primary marketing navigation. */
+/** Primary marketing navigation (less-important links live in the footer). */
 export const MAIN_NAV = [
   { label: "Courses", href: "/courses" },
-  { label: "Membership", href: "/membership" },
+  { label: "Tutorials", href: "/tutorials" },
+  { label: "Streams", href: "/streams" },
   { label: "Blog", href: "/blog" },
-  { label: "Verify Certificate", href: "/verify" },
-  { label: "Contact", href: "/contact" },
+  { label: "Tools", href: "/tools" },
 ] as const
 
 /** Student dashboard navigation. */

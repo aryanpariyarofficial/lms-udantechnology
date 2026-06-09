@@ -16,6 +16,10 @@ import {
   Users,
   PlayCircle,
   Quote,
+  GraduationCap,
+  Clock,
+  Calendar,
+  Sparkles,
   type LucideIcon,
 } from "lucide-react"
 
@@ -42,6 +46,8 @@ import {
   SAMPLE_REVIEWS,
   SAMPLE_INSTRUCTORS,
   HOME_FAQS,
+  HOME_STATS,
+  SAMPLE_TUTORIALS,
 } from "@/lib/sample-data"
 import { initials } from "@/lib/format"
 import { JsonLd, organizationLd, websiteLd } from "@/components/seo/json-ld"
@@ -138,6 +144,22 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ---------------- Stats bar ---------------- */}
+      <section className="border-b bg-background">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 divide-x divide-y sm:grid-cols-3 lg:grid-cols-5 lg:divide-y-0">
+            {HOME_STATS.map((s) => (
+              <div key={s.label} className="py-8 text-center">
+                <p className="text-3xl font-bold text-primary sm:text-4xl">{s.value}</p>
+                <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                  {s.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ---------------- Categories ---------------- */}
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-8 flex items-end justify-between">
@@ -169,6 +191,32 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ---------------- Getting started banner ---------------- */}
+      <section className="mx-auto max-w-7xl px-4 pb-4 sm:px-6 lg:px-8">
+        <div className="flex flex-col items-center gap-6 overflow-hidden rounded-3xl border bg-gradient-to-r from-accent via-background to-accent p-8 sm:flex-row sm:justify-between sm:p-10">
+          <div className="max-w-2xl space-y-3 text-center sm:text-left">
+            <Badge variant="secondary" className="gap-1.5">
+              <Sparkles className="size-3.5 text-primary" /> New here?
+            </Badge>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              New to digital skills? Start free.
+            </h2>
+            <p className="text-muted-foreground">
+              Begin with our beginner-friendly path — learn the fundamentals of web
+              development, design, and AI step by step, in Nepali. No experience needed.
+            </p>
+            <Button asChild size="lg" className="mt-1">
+              <Link href="/courses">
+                Start Learning <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
+          <div className="grid size-32 shrink-0 place-items-center rounded-2xl bg-primary/10 sm:size-40">
+            <GraduationCap className="size-16 text-primary sm:size-20" />
+          </div>
+        </div>
+      </section>
+
       {/* ---------------- Featured courses ---------------- */}
       <section className="bg-muted/30 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -190,6 +238,67 @@ export default async function HomePage() {
               <CourseCard key={c.slug} course={c} />
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ---------------- Popular Tutorials ---------------- */}
+      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="mb-8 flex items-end justify-between">
+          <div>
+            <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+              Popular tutorials
+            </h2>
+            <p className="mt-2 text-muted-foreground">
+              Free single-video tutorials and crash courses for quick wins.
+            </p>
+          </div>
+          <Button asChild variant="ghost" className="hidden sm:inline-flex">
+            <Link href="/courses">All tutorials →</Link>
+          </Button>
+        </div>
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {SAMPLE_TUTORIALS.map((t, i) => {
+            const gradient = [
+              "from-violet-500 to-indigo-600",
+              "from-emerald-500 to-teal-600",
+              "from-amber-500 to-orange-600",
+            ][i % 3]
+            return (
+              <Link key={t.title} href="/courses" className="group block">
+                <Card className="h-full overflow-hidden pt-0 transition-all hover:-translate-y-1 hover:shadow-lg">
+                  <div
+                    className={`relative flex aspect-video items-center justify-center bg-gradient-to-br ${gradient}`}
+                  >
+                    <span className="grid size-14 place-items-center rounded-full bg-white/20 backdrop-blur transition-transform group-hover:scale-110">
+                      <PlayCircle className="size-8 text-white" />
+                    </span>
+                    <Badge className="absolute left-3 top-3 bg-white/90 text-foreground hover:bg-white">
+                      Free
+                    </Badge>
+                  </div>
+                  <div className="space-y-3 px-5 pb-5">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="secondary" className="font-normal">
+                        {t.category}
+                      </Badge>
+                      <span className="text-xs text-muted-foreground">{t.level}</span>
+                    </div>
+                    <h3 className="line-clamp-2 font-semibold leading-snug group-hover:text-primary">
+                      {t.title}
+                    </h3>
+                    <div className="flex items-center gap-4 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1">
+                        <Clock className="size-3.5" /> {t.duration}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Calendar className="size-3.5" /> {t.date}
+                      </span>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            )
+          })}
         </div>
       </section>
 

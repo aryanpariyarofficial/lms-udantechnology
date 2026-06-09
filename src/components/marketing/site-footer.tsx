@@ -12,15 +12,16 @@ import { getSettings } from "@/lib/queries/settings"
 
 const FOOTER_LINKS = {
   Learn: [
-    { label: "All Courses", href: "/courses" },
-    { label: "Membership", href: "/membership" },
-    { label: "Verify Certificate", href: "/verify" },
-    { label: "Blog", href: "/blog" },
+    { label: "Courses", href: "/courses" },
+    { label: "Tutorials", href: "/tutorials" },
+    { label: "Streams", href: "/streams" },
+    { label: "Tools", href: "/tools" },
   ],
-  Company: [
-    { label: "About", href: "/about" },
+  Resources: [
+    { label: "Membership", href: "/membership" },
+    { label: "Blog", href: "/blog" },
+    { label: "Verify Certificate", href: "/verify" },
     { label: "Contact", href: "/contact" },
-    { label: "Become an Instructor", href: "/teach" },
   ],
   Legal: [
     { label: "Terms of Service", href: "/terms" },
