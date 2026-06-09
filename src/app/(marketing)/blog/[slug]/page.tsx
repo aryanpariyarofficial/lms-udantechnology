@@ -17,13 +17,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Markdown } from "@/components/blog/markdown"
+import { BlogBlocks } from "@/components/blog/blog-blocks"
 import { ShareButtons } from "@/components/blog/share-buttons"
 import {
   getBlogBySlug,
   getAdjacentPosts,
   getRelatedPosts,
 } from "@/lib/queries/blog"
-import { extractToc } from "@/lib/blog-toc"
+import { extractToc, extractTocFromBlocks, blocksPlainText } from "@/lib/blog-toc"
 import { formatDate, initials, readingTime } from "@/lib/format"
 import { JsonLd, articleLd } from "@/components/seo/json-ld"
 import { SITE } from "@/lib/constants"
@@ -64,8 +65,9 @@ export default async function BlogPostPage({
     getRelatedPosts(post.id, 3),
   ])
 
-  const toc = extractToc(post.content)
-  const minutes = readingTime(post.content)
+  const isJson = !!post.content?.trim().startsWith("[")
+  const toc = isJson ? extractTocFromBlocks(post.content) : extractToc(post.content)
+  const minutes = readingTime(isJson ? blocksPlainText(post.content) : post.content)
   const authorName = post.author?.full_name ?? "UDAN Technology"
   const url = `${SITE.url}/blog/${slug}`
 
@@ -127,10 +129,12 @@ export default async function BlogPostPage({
       {/* Body + TOC */}
       <div className="mt-10 grid gap-10 lg:grid-cols-[1fr_260px]">
         <div className="min-w-0">
-          {post.content ? (
-            <Markdown content={post.content} />
-          ) : (
+          {!post.content ? (
             <p className="text-muted-foreground">No content.</p>
+          ) : isJson ? (
+            <BlogBlocks json={post.content} />
+          ) : (
+            <Markdown content={post.content} />
           )}
 
           {/* Author byline */}

@@ -80,11 +80,12 @@ export function BlogForm({ post }: { post: Blog }) {
             <div className="space-y-2">
               <Label>Content</Label>
               <input type="hidden" name="content" value={content} />
-              <BlockEditor initialMarkdown={post.content ?? ""} onChange={setContent} />
+              <BlockEditor initialContent={post.content ?? ""} onChange={setContent} />
               <p className="text-xs text-muted-foreground">
-                Type <code className="rounded bg-muted px-1">/</code> to add blocks —
-                headings, lists, quote, code, image, table and more. Drag the ⠿ handle
-                to reorder. Content saves as Markdown.
+                Type <code className="rounded bg-muted px-1">/</code> for blocks —
+                headings, lists, quote, code, image, table, and{" "}
+                <strong>CTA blocks</strong> (Course Card, Button, Contact). Click a CTA
+                block to edit its settings. Drag ⠿ to reorder.
               </p>
             </div>
             <div className="space-y-2">
