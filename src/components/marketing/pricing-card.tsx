@@ -29,8 +29,9 @@ export function PricingCard({
   return (
     <Card
       className={cn(
-        "relative flex flex-col",
-        featured && "border-primary shadow-lg ring-1 ring-primary"
+        "relative flex flex-col transition-transform",
+        featured &&
+          "z-10 border-primary shadow-xl ring-2 ring-primary lg:scale-[1.06]"
       )}
     >
       {featured && (

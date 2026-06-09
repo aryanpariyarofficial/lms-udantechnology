@@ -3,6 +3,8 @@ import { Inter, Poppins, Geist_Mono } from "next/font/google"
 
 import { SITE } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/theme-provider"
+import { getSettings } from "@/lib/queries/settings"
 import "./globals.css"
 
 // Body / UI font — clean, highly legible
@@ -55,11 +57,14 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
 }>) {
+  const { primary_color } = await getSettings()
+  const brand = /^#[0-9a-fA-F]{6}$/.test(primary_color) ? primary_color : null
+
   return (
     <html
       lang="en"
@@ -67,8 +72,22 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {children}
-        <Toaster richColors position="top-center" />
+        {brand && (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `:root,.dark{--primary:${brand};--ring:${brand};--sidebar-primary:${brand};--sidebar-ring:${brand};--chart-1:${brand};}`,
+            }}
+          />
+        )}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster richColors position="top-center" />
+        </ThemeProvider>
       </body>
     </html>
   )

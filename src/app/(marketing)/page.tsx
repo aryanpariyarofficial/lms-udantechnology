@@ -349,7 +349,7 @@ export default async function HomePage() {
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {plans.map((p, i) => (
-              <PricingCard key={p.slug} plan={p} featured={i === 3} />
+              <PricingCard key={p.slug} plan={p} featured={i === 2} />
             ))}
           </div>
         </div>

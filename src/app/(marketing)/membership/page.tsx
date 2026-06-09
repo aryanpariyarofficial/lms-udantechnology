@@ -70,7 +70,7 @@ export default async function MembershipPage() {
       <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {plans.map((p, i) => (
-            <PricingCard key={p.slug} plan={p} featured={i === 3} href="/checkout" />
+            <PricingCard key={p.slug} plan={p} featured={i === 2} href="/checkout" />
           ))}
         </div>
 

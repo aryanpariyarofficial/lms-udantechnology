@@ -10,6 +10,9 @@ export const SITE = {
 /** WhatsApp support number in international format (no +). */
 export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "9779848988463"
 
+/** Default brand color (matches globals.css --primary, in hex). */
+export const DEFAULT_PRIMARY = "#5650EF"
+
 /** Manual payment account details (public, shown on the payment page). */
 export const PAYMENT_INFO = {
   esewa: process.env.NEXT_PUBLIC_ESEWA_NUMBER ?? "",

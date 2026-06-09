@@ -11,6 +11,7 @@ export type SiteSettings = {
   instagram: string
   youtube: string
   payment_instructions: string
+  primary_color: string
 }
 
 const DEFAULTS: SiteSettings = {
@@ -24,6 +25,7 @@ const DEFAULTS: SiteSettings = {
   youtube: "",
   payment_instructions:
     "Pay using any method below, then upload your payment screenshot and transaction ID. Access is granted after admin approval.",
+  primary_color: "",
 }
 
 /** Reads the settings table and flattens it into a typed object with defaults. */
@@ -41,6 +43,7 @@ export async function getSettings(): Promise<SiteSettings> {
     const hero = map.get("hero") ?? {}
     const socials = map.get("socials") ?? {}
     const payment = map.get("payment") ?? {}
+    const theme = map.get("theme") ?? {}
 
     return {
       tagline: site.tagline ?? DEFAULTS.tagline,
@@ -51,6 +54,7 @@ export async function getSettings(): Promise<SiteSettings> {
       instagram: socials.instagram ?? "",
       youtube: socials.youtube ?? "",
       payment_instructions: payment.instructions ?? DEFAULTS.payment_instructions,
+      primary_color: theme.primary ?? "",
     }
   } catch {
     return DEFAULTS

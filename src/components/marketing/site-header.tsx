@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/brand/logo"
 import { MobileNav } from "@/components/marketing/mobile-nav"
 import { AccountMenu } from "@/components/marketing/account-menu"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { MARKETING_NAV_ICONS } from "@/components/marketing/nav-icons"
 import { MAIN_NAV } from "@/lib/constants"
 import { getCurrentUser } from "@/lib/auth"
@@ -36,6 +37,7 @@ export async function SiteHeader() {
         </div>
 
         <div className="flex items-center gap-2">
+          <ThemeToggle />
           {isAuthed ? (
             <AccountMenu
               name={current?.profile?.full_name ?? null}

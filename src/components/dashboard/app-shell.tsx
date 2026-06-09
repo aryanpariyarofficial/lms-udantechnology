@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { Logo } from "@/components/brand/logo"
 import { NotificationBell } from "@/components/dashboard/notification-bell"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { NAV_ICONS } from "@/components/dashboard/icon-map"
 import { initials } from "@/lib/format"
 import { signOutAction } from "@/app/(auth)/actions"
@@ -163,6 +164,7 @@ export function AppShell({
         <header className="flex items-center justify-between border-b bg-background p-3 lg:hidden">
           <Logo />
           <div className="flex items-center gap-1">
+            <ThemeToggle />
             <NotificationBell />
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger asChild>
@@ -184,7 +186,8 @@ export function AppShell({
         </header>
 
         {/* Desktop top bar */}
-        <div className="hidden items-center justify-end border-b bg-background px-6 py-2 lg:flex">
+        <div className="hidden items-center justify-end gap-1 border-b bg-background px-6 py-2 lg:flex">
+          <ThemeToggle />
           <NotificationBell />
         </div>
 

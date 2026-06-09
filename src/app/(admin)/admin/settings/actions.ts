@@ -21,6 +21,7 @@ export async function updateSettings(formData: FormData): Promise<Result> {
       value: { facebook: get("facebook"), instagram: get("instagram"), youtube: get("youtube") },
     },
     { key: "payment", value: { instructions: get("payment_instructions") } },
+    { key: "theme", value: { primary: get("primary_color") } },
   ]
 
   const { error } = await supabase
