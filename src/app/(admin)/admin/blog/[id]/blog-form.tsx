@@ -58,9 +58,18 @@ export function BlogForm({ post }: { post: Blog }) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="content">Content</Label>
-              <Textarea id="content" name="content" rows={14} defaultValue={post.content ?? ""} />
+              <Textarea
+                id="content"
+                name="content"
+                rows={18}
+                defaultValue={post.content ?? ""}
+                className="font-mono text-sm"
+              />
               <p className="text-xs text-muted-foreground">
-                Plain text / line breaks are preserved.
+                Supports <strong>Markdown</strong>: <code># Heading</code>,{" "}
+                <code>## Subheading</code> (build the table of contents),{" "}
+                <code>**bold**</code>, <code>- list</code>,{" "}
+                <code>[link](url)</code>, <code>```code```</code>, images, etc.
               </p>
             </div>
             <div className="space-y-2">

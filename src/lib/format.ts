@@ -77,6 +77,13 @@ export function slugify(text: string): string {
     .replace(/^-+|-+$/g, "")
 }
 
+/** Estimated reading time in minutes (~200 words/min). */
+export function readingTime(text: string | null | undefined): number {
+  if (!text) return 1
+  const words = text.trim().split(/\s+/).filter(Boolean).length
+  return Math.max(1, Math.ceil(words / 200))
+}
+
 /** Initials for an avatar fallback. */
 export function initials(name: string | null | undefined): string {
   if (!name) return "U"
