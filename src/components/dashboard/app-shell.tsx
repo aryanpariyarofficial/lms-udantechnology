@@ -12,6 +12,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@/components/ui/avatar"
+import { Badge } from "@/components/ui/badge"
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet"
 import { Logo } from "@/components/brand/logo"
 import { NotificationBell } from "@/components/dashboard/notification-bell"
@@ -77,18 +78,41 @@ function SidebarBody({
   label: string
   onNavigate?: () => void
 }) {
+  const roleLabel =
+    user.role === "super_admin"
+      ? "Admin"
+      : user.role === "instructor"
+        ? "Instructor"
+        : user.role === "membership_user"
+          ? "Member"
+          : "Student"
+
   return (
     <div className="flex h-full flex-col gap-4 p-4">
-      <div className="flex items-center justify-between">
-        <Logo />
+      <Logo />
+
+      {/* User card */}
+      <div className="flex items-center gap-3 rounded-xl border bg-muted/40 p-3">
+        <Avatar className="size-9">
+          <AvatarImage src={user.avatar ?? undefined} />
+          <AvatarFallback>{initials(user.name)}</AvatarFallback>
+        </Avatar>
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium">{user.name ?? "User"}</p>
+          <Badge variant="secondary" className="mt-0.5 h-5 px-1.5 text-[10px]">
+            {roleLabel}
+          </Badge>
+        </div>
       </div>
+
       <span className="px-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">
         {label}
       </span>
       <div className="flex-1 overflow-y-auto">
         <NavLinks items={items} onNavigate={onNavigate} />
       </div>
-      <div className="space-y-2 border-t pt-4">
+
+      <div className="space-y-1 border-t pt-3">
         {label === "Admin" ? (
           <Button asChild variant="ghost" size="sm" className="w-full justify-start gap-2">
             <Link href="/dashboard">
@@ -102,16 +126,6 @@ function SidebarBody({
             </Link>
           </Button>
         ) : null}
-        <div className="flex items-center gap-3 rounded-lg px-2 py-1.5">
-          <Avatar className="size-8">
-            <AvatarImage src={user.avatar ?? undefined} />
-            <AvatarFallback>{initials(user.name)}</AvatarFallback>
-          </Avatar>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium">{user.name ?? "User"}</p>
-            <p className="truncate text-xs text-muted-foreground">{user.email}</p>
-          </div>
-        </div>
         <form action={signOutAction}>
           <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-muted-foreground">
             <LogOut className="size-4" /> Sign out

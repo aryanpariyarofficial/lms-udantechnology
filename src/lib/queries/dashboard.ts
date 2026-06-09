@@ -96,6 +96,22 @@ export async function getMyCertificates(userId: string) {
   }
 }
 
+export async function getLearningStats(
+  userId: string
+): Promise<{ completedLessons: number }> {
+  try {
+    const supabase = await createClient()
+    const { count } = await supabase
+      .from("lesson_progress")
+      .select("id", { count: "exact", head: true })
+      .eq("user_id", userId)
+      .eq("completed", true)
+    return { completedLessons: count ?? 0 }
+  } catch {
+    return { completedLessons: 0 }
+  }
+}
+
 export async function getMyNotifications(userId: string) {
   try {
     const supabase = await createClient()

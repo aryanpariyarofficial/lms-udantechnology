@@ -22,11 +22,11 @@ export const PAYMENT_INFO = {
 
 /** Primary marketing navigation (less-important links live in the footer). */
 export const MAIN_NAV = [
-  { label: "Courses", href: "/courses" },
-  { label: "Tutorials", href: "/tutorials" },
-  { label: "Streams", href: "/streams" },
-  { label: "Blog", href: "/blog" },
-  { label: "Tools", href: "/tools" },
+  { label: "Courses", href: "/courses", icon: "LayoutGrid" },
+  { label: "Tutorials", href: "/tutorials", icon: "MonitorPlay" },
+  { label: "Streams", href: "/streams", icon: "Radio" },
+  { label: "Blog", href: "/blog", icon: "Newspaper" },
+  { label: "Tools", href: "/tools", icon: "Wrench" },
 ] as const
 
 /** Student dashboard navigation. */

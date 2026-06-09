@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet"
 import { Button } from "@/components/ui/button"
 import { Logo } from "@/components/brand/logo"
+import { MARKETING_NAV_ICONS } from "@/components/marketing/nav-icons"
 import { MAIN_NAV } from "@/lib/constants"
 
 export function MobileNav({ isAuthed }: { isAuthed: boolean }) {
@@ -32,16 +33,20 @@ export function MobileNav({ isAuthed }: { isAuthed: boolean }) {
           </SheetTitle>
         </SheetHeader>
         <nav className="mt-2 flex flex-col gap-1 px-4">
-          {MAIN_NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              onClick={() => setOpen(false)}
-              className="rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-            >
-              {item.label}
-            </Link>
-          ))}
+          {MAIN_NAV.map((item) => {
+            const Icon = MARKETING_NAV_ICONS[item.icon]
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                onClick={() => setOpen(false)}
+                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
+              >
+                {Icon && <Icon className="size-4 text-muted-foreground" />}
+                {item.label}
+              </Link>
+            )
+          })}
         </nav>
         <div className="mt-4 flex flex-col gap-2 px-4">
           {isAuthed ? (
