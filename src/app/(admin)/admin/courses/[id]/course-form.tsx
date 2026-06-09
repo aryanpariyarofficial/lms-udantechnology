@@ -137,6 +137,14 @@ export function CourseForm({
             </div>
 
             <div className="space-y-2">
+              <Label htmlFor="slug">URL slug</Label>
+              <Input id="slug" name="slug" defaultValue={course.slug} />
+              <p className="text-xs text-muted-foreground">
+                /courses/<span className="font-medium text-foreground">{course.slug}</span>
+              </p>
+            </div>
+
+            <div className="space-y-2">
               <Label htmlFor="subtitle">Subtitle</Label>
               <Input id="subtitle" name="subtitle" defaultValue={course.subtitle ?? ""} />
             </div>

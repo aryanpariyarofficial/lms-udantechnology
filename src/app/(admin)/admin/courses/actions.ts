@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 
 import { createClient } from "@/lib/supabase/server"
 import { requireAdmin } from "@/lib/auth"
-import { slugify } from "@/lib/format"
+import { uniqueSlug } from "@/lib/slug"
 import type { CourseLevel, CourseStatus, LessonType } from "@/lib/supabase/types"
 
 export type ActionResult = { ok: boolean; error?: string }
@@ -34,7 +34,7 @@ export async function createCourse(formData: FormData) {
   const title = String(formData.get("title") ?? "").trim()
   if (!title) return
 
-  const slug = `${slugify(title)}-${Math.random().toString(36).slice(2, 6)}`
+  const slug = await uniqueSlug(supabase, "courses", title)
   const { data, error } = await supabase
     .from("courses")
     .insert({ title, slug, status: "draft" })
@@ -63,10 +63,16 @@ export async function updateCourse(
     return Number.isFinite(v) ? v : 0
   }
 
+  const slugInput = String(formData.get("slug") ?? "").trim()
+  const slug = slugInput
+    ? await uniqueSlug(supabase, "courses", slugInput, courseId)
+    : undefined
+
   const { error } = await supabase
     .from("courses")
     .update({
       title: String(formData.get("title") ?? "").trim(),
+      ...(slug ? { slug } : {}),
       subtitle: String(formData.get("subtitle") ?? "").trim() || null,
       description: String(formData.get("description") ?? "").trim() || null,
       category_id: String(formData.get("category_id") ?? "") || null,

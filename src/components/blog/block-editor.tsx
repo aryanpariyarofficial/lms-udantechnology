@@ -7,6 +7,8 @@ import { BlockNoteView } from "@blocknote/mantine"
 import "@blocknote/core/fonts/inter.css"
 import "@blocknote/mantine/style.css"
 
+import { compressImage } from "@/components/cloudinary/compress"
+
 const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 const PRESET = process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET
 
@@ -28,8 +30,9 @@ export function BlockEditor({
   const editor = useCreateBlockNote({
     uploadFile: async (file: File) => {
       if (!CLOUD || !PRESET) return ""
+      const optimized = await compressImage(file)
       const body = new FormData()
-      body.append("file", file)
+      body.append("file", optimized)
       body.append("upload_preset", PRESET)
       const res = await fetch(
         `https://api.cloudinary.com/v1_1/${CLOUD}/auto/upload`,

@@ -67,6 +67,13 @@ export function BlogForm({ post }: { post: Blog }) {
               <Input id="title" name="title" defaultValue={post.title} required />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="slug">URL slug</Label>
+              <Input id="slug" name="slug" defaultValue={post.slug} />
+              <p className="text-xs text-muted-foreground">
+                /blog/<span className="font-medium text-foreground">{post.slug}</span>
+              </p>
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="excerpt">Excerpt</Label>
               <Input id="excerpt" name="excerpt" defaultValue={post.excerpt ?? ""} />
             </div>

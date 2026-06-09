@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 
 import { createClient } from "@/lib/supabase/server"
 import { requireAdmin } from "@/lib/auth"
-import { slugify } from "@/lib/format"
+import { uniqueSlug } from "@/lib/slug"
 import type { ContentStatus } from "@/lib/supabase/types"
 
 export type Result = { ok: boolean; error?: string }
@@ -15,7 +15,7 @@ export async function createBlog(formData: FormData) {
   const supabase = await createClient()
   const title = String(formData.get("title") ?? "").trim()
   if (!title) return
-  const slug = `${slugify(title)}-${Math.random().toString(36).slice(2, 6)}`
+  const slug = await uniqueSlug(supabase, "blogs", title)
   const { data, error } = await supabase
     .from("blogs")
     .insert({ title, slug, author_id: user.id, status: "draft" })
@@ -34,10 +34,14 @@ export async function updateBlog(id: string, formData: FormData): Promise<Result
     .map((s) => s.trim())
     .filter(Boolean)
 
+  const slugInput = String(formData.get("slug") ?? "").trim()
+  const slug = slugInput ? await uniqueSlug(supabase, "blogs", slugInput, id) : undefined
+
   const { error } = await supabase
     .from("blogs")
     .update({
       title: String(formData.get("title") ?? "").trim(),
+      ...(slug ? { slug } : {}),
       excerpt: String(formData.get("excerpt") ?? "").trim() || null,
       content: String(formData.get("content") ?? "") || null,
       cover_url: String(formData.get("cover_url") ?? "") || null,
