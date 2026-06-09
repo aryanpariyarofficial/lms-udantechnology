@@ -29,13 +29,13 @@ export function PricingCard({
   return (
     <Card
       className={cn(
-        "relative flex flex-col transition-transform",
+        "relative flex flex-col overflow-visible transition-transform",
         featured &&
           "z-10 border-primary shadow-xl ring-2 ring-primary lg:scale-[1.06]"
       )}
     >
       {featured && (
-        <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 gap-1">
+        <Badge className="absolute -top-3 left-1/2 z-20 -translate-x-1/2 gap-1 whitespace-nowrap shadow-md">
           <Crown className="size-3" /> Most Popular
         </Badge>
       )}
