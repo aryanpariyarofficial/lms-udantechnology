@@ -1,13 +1,23 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono } from "next/font/google"
+import { Inter, Poppins, Geist_Mono } from "next/font/google"
 
 import { SITE } from "@/lib/constants"
 import { Toaster } from "@/components/ui/sonner"
 import "./globals.css"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Body / UI font — clean, highly legible
+const inter = Inter({
+  variable: "--font-sans",
   subsets: ["latin"],
+  display: "swap",
+})
+
+// Heading / display font — modern and professional
+const poppins = Poppins({
+  variable: "--font-heading",
+  weight: ["500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
 })
 
 const geistMono = Geist_Mono({
@@ -53,7 +63,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${inter.variable} ${poppins.variable} ${geistMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">

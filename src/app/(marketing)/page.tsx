@@ -20,6 +20,8 @@ import {
   Clock,
   Calendar,
   Sparkles,
+  BookOpen,
+  MonitorPlay,
   type LucideIcon,
 } from "lucide-react"
 
@@ -80,6 +82,14 @@ const FEATURES = [
   { icon: BadgeCheck, title: "Project-based learning", desc: "Practical lessons in Nepali designed to get you job-ready and freelance-ready." },
 ]
 
+const STAT_ICONS: Record<string, LucideIcon> = {
+  Users,
+  BookOpen,
+  MonitorPlay,
+  Award,
+  Star,
+}
+
 export default async function HomePage() {
   const [dbCourses, dbPlans, settings] = await Promise.all([
     getFeaturedCourses(6),
@@ -129,17 +139,6 @@ export default async function HomePage() {
                 <Link href="/membership">View Memberships</Link>
               </Button>
             </div>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm text-white/80">
-              <span className="flex items-center gap-2">
-                <Users className="size-4" /> 10,000+ students
-              </span>
-              <span className="flex items-center gap-2">
-                <PlayCircle className="size-4" /> 50+ courses
-              </span>
-              <span className="flex items-center gap-2">
-                <Star className="size-4 fill-amber-400 text-amber-400" /> 4.8 average rating
-              </span>
-            </div>
           </div>
         </div>
       </section>
@@ -148,14 +147,23 @@ export default async function HomePage() {
       <section className="border-b bg-background">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 divide-x divide-y sm:grid-cols-3 lg:grid-cols-5 lg:divide-y-0">
-            {HOME_STATS.map((s) => (
-              <div key={s.label} className="py-8 text-center">
-                <p className="text-3xl font-bold text-primary sm:text-4xl">{s.value}</p>
-                <p className="mt-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                  {s.label}
-                </p>
-              </div>
-            ))}
+            {HOME_STATS.map((s) => {
+              const Icon = STAT_ICONS[s.icon] ?? Users
+              return (
+                <div
+                  key={s.label}
+                  className="flex flex-col items-center gap-2 py-8 text-center"
+                >
+                  <span className="grid size-11 place-items-center rounded-xl bg-primary/10 text-primary">
+                    <Icon className="size-5" />
+                  </span>
+                  <p className="text-3xl font-bold sm:text-4xl">{s.value}</p>
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    {s.label}
+                  </p>
+                </div>
+              )
+            })}
           </div>
         </div>
       </section>

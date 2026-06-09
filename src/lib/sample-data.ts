@@ -212,11 +212,11 @@ export const SAMPLE_INSTRUCTORS = [
 ]
 
 export const HOME_STATS = [
-  { label: "Students", value: "12,400+" },
-  { label: "Courses", value: "45+" },
-  { label: "Tutorials", value: "120+" },
-  { label: "Certificates", value: "8,600+" },
-  { label: "Articles", value: "30+" },
+  { label: "Students", value: "12,400+", icon: "Users" },
+  { label: "Courses", value: "45+", icon: "BookOpen" },
+  { label: "Tutorials", value: "120+", icon: "MonitorPlay" },
+  { label: "Certificates", value: "8,600+", icon: "Award" },
+  { label: "Rating", value: "4.8", icon: "Star" },
 ]
 
 export type SampleTutorial = {
