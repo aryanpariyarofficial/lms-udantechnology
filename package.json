@@ -9,6 +9,9 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@blocknote/core": "^0.51.4",
+    "@blocknote/mantine": "^0.51.4",
+    "@blocknote/react": "^0.51.4",
     "@hookform/resolvers": "^5.4.0",
     "@react-email/components": "^1.0.12",
     "@supabase/ssr": "^0.10.3",

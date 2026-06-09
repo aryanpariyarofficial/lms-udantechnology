@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
 import { slugify } from "@/lib/format"
+import { CodeBlock } from "@/components/blog/code-block"
 
 /** Flatten React children to plain text (for heading slugs). */
 function toText(node: ReactNode): string {
@@ -27,6 +28,7 @@ export function Markdown({ content }: { content: string }) {
           h3: ({ children }) => (
             <h3 id={slugify(toText(children))}>{children}</h3>
           ),
+          pre: ({ children }) => <CodeBlock>{children}</CodeBlock>,
         }}
       >
         {content}

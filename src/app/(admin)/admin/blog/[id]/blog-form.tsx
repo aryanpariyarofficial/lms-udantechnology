@@ -2,6 +2,7 @@
 
 import { useActionState, useState, useTransition } from "react"
 import { useFormStatus } from "react-dom"
+import dynamic from "next/dynamic"
 import Link from "next/link"
 import { Loader2, Trash2, ExternalLink } from "lucide-react"
 import { toast } from "sonner"
@@ -9,12 +10,24 @@ import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { ImageUpload } from "@/components/cloudinary/image-upload"
 import { updateBlog, deleteBlog, type Result } from "../actions"
 import type { Blog } from "@/lib/supabase/types"
+
+// Block editor is client/DOM-only — load without SSR.
+const BlockEditor = dynamic(
+  () => import("@/components/blog/block-editor").then((m) => m.BlockEditor),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="grid h-40 place-items-center rounded-lg border text-sm text-muted-foreground">
+        Loading editor…
+      </div>
+    ),
+  }
+)
 
 function SaveButton() {
   const { pending } = useFormStatus()
@@ -28,6 +41,7 @@ function SaveButton() {
 
 export function BlogForm({ post }: { post: Blog }) {
   const [cover, setCover] = useState<string | null>(post.cover_url)
+  const [content, setContent] = useState(post.content ?? "")
   const [, startTransition] = useTransition()
   const [state, formAction] = useActionState<Result, FormData>(
     async (_prev, fd) => {
@@ -57,19 +71,13 @@ export function BlogForm({ post }: { post: Blog }) {
               <Input id="excerpt" name="excerpt" defaultValue={post.excerpt ?? ""} />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="content">Content</Label>
-              <Textarea
-                id="content"
-                name="content"
-                rows={18}
-                defaultValue={post.content ?? ""}
-                className="font-mono text-sm"
-              />
+              <Label>Content</Label>
+              <input type="hidden" name="content" value={content} />
+              <BlockEditor initialMarkdown={post.content ?? ""} onChange={setContent} />
               <p className="text-xs text-muted-foreground">
-                Supports <strong>Markdown</strong>: <code># Heading</code>,{" "}
-                <code>## Subheading</code> (build the table of contents),{" "}
-                <code>**bold**</code>, <code>- list</code>,{" "}
-                <code>[link](url)</code>, <code>```code```</code>, images, etc.
+                Type <code className="rounded bg-muted px-1">/</code> to add blocks —
+                headings, lists, quote, code, image, table and more. Drag the ⠿ handle
+                to reorder. Content saves as Markdown.
               </p>
             </div>
             <div className="space-y-2">
