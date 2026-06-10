@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { rateLimit } from "@/lib/rate-limit"
 import { validateEmail } from "@/lib/validation/email-server"
 
 export type ContactState = { error?: string; message?: string }
@@ -9,10 +10,13 @@ export async function sendContactAction(
   _prev: ContactState,
   formData: FormData
 ): Promise<ContactState> {
-  const name = String(formData.get("name") ?? "").trim()
-  const email = String(formData.get("email") ?? "").trim()
-  const subject = String(formData.get("subject") ?? "").trim()
-  const message = String(formData.get("message") ?? "").trim()
+  const limited = await rateLimit("contact", 5, 10 * 60_000)
+  if (limited) return { error: limited }
+
+  const name = String(formData.get("name") ?? "").trim().slice(0, 100)
+  const email = String(formData.get("email") ?? "").trim().slice(0, 200)
+  const subject = String(formData.get("subject") ?? "").trim().slice(0, 150)
+  const message = String(formData.get("message") ?? "").trim().slice(0, 5000)
 
   if (!name || !message) {
     return { error: "Please fill in your name and message." }

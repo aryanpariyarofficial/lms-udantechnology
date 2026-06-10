@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server"
 
 import { createClient } from "@/lib/supabase/server"
+import { safePath } from "@/lib/utils"
 
 /**
  * OAuth (Google) + password-reset callback.
@@ -9,7 +10,7 @@ import { createClient } from "@/lib/supabase/server"
 export async function GET(request: NextRequest) {
   const { searchParams, origin } = new URL(request.url)
   const code = searchParams.get("code")
-  const next = searchParams.get("next") ?? "/dashboard"
+  const next = safePath(searchParams.get("next"))
   const error = searchParams.get("error_description") ?? searchParams.get("error")
 
   if (error) {

@@ -33,12 +33,20 @@ function styled(t: any, key: number): ReactNode {
   )
 }
 
+/** Allow only http(s)/mailto/tel/relative URLs — blocks javascript: etc. */
+function safeUrl(url: string | undefined): string {
+  const u = (url ?? "").trim()
+  if (!u) return "#"
+  if (/^(https?:|mailto:|tel:|\/|#)/i.test(u)) return u
+  return "#"
+}
+
 function renderInline(content?: Inline[]): ReactNode {
   if (!Array.isArray(content)) return null
   return content.map((c, i) => {
     if (c?.type === "link")
       return (
-        <a key={i} href={c.href} target="_blank" rel="noreferrer">
+        <a key={i} href={safeUrl(c.href)} target="_blank" rel="noreferrer">
           {renderInline(c.content)}
         </a>
       )
@@ -109,7 +117,7 @@ function renderBlock(block: Block, key: number): ReactNode {
           className="not-prose my-4"
           style={{ textAlign: (p.align as any) ?? "left" }}
         >
-          <a href={p.url || "#"} style={style} target="_blank" rel="noreferrer">
+          <a href={safeUrl(p.url)} style={style} target="_blank" rel="noreferrer">
             {p.text || "Button"}
           </a>
         </div>

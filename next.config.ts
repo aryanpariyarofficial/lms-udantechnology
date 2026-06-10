@@ -4,11 +4,43 @@ const supabaseHost = process.env.NEXT_PUBLIC_SUPABASE_URL
   ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname
   : undefined
 
+// Content-Security-Policy. script-src 'unsafe-inline' is required by Next.js
+// hydration; 'unsafe-eval' only in dev (React Refresh).
+const csp = [
+  "default-src 'self'",
+  `script-src 'self' 'unsafe-inline'${process.env.NODE_ENV === "development" ? " 'unsafe-eval'" : ""}`,
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob: https:",
+  "font-src 'self' data:",
+  "connect-src 'self' https://*.supabase.co wss://*.supabase.co https://api.cloudinary.com",
+  "frame-src https://www.youtube-nocookie.com https://www.youtube.com",
+  "media-src 'self' https:",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+].join("; ")
+
+const securityHeaders = [
+  { key: "Content-Security-Policy", value: csp },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=(), payment=()",
+  },
+]
+
 const nextConfig: NextConfig = {
   // Standalone build → a self-contained server bundle that runs with
   // `node server.js`. Makes deployment to cPanel / business (Node.js) hosting
   // straightforward, no Vercel lock-in.
   output: "standalone",
+
+  async headers() {
+    return [{ source: "/(.*)", headers: securityHeaders }]
+  },
 
   images: {
     remotePatterns: [

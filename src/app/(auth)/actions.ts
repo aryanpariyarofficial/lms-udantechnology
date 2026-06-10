@@ -6,6 +6,8 @@ import { headers } from "next/headers"
 
 import { createClient } from "@/lib/supabase/server"
 import { SITE } from "@/lib/constants"
+import { rateLimit } from "@/lib/rate-limit"
+import { safePath } from "@/lib/utils"
 import { nameProblem } from "@/lib/validation/email"
 import { validateEmail } from "@/lib/validation/email-server"
 
@@ -24,7 +26,10 @@ export async function signInAction(
 ): Promise<AuthState> {
   const email = String(formData.get("email") ?? "")
   const password = String(formData.get("password") ?? "")
-  const next = String(formData.get("next") ?? "/dashboard")
+  const next = safePath(String(formData.get("next") ?? ""))
+
+  const limited = await rateLimit("signin", 10, 15 * 60_000)
+  if (limited) return { error: limited }
 
   const supabase = await createClient()
   const { error } = await supabase.auth.signInWithPassword({ email, password })
@@ -34,7 +39,7 @@ export async function signInAction(
   }
 
   revalidatePath("/", "layout")
-  redirect(next || "/dashboard")
+  redirect(next)
 }
 
 export async function signUpAction(
@@ -44,6 +49,9 @@ export async function signUpAction(
   const fullName = String(formData.get("fullName") ?? "")
   const email = String(formData.get("email") ?? "")
   const password = String(formData.get("password") ?? "")
+
+  const limited = await rateLimit("signup", 5, 15 * 60_000)
+  if (limited) return { error: limited }
 
   const nErr = nameProblem(fullName)
   if (nErr) return { error: nErr }
@@ -62,7 +70,8 @@ export async function signUpAction(
     },
   })
 
-  if (error) {
+  // Don't reveal whether an email is already registered (enumeration).
+  if (error && !/already registered/i.test(error.message)) {
     return { error: error.message }
   }
 
@@ -73,7 +82,7 @@ export async function signUpAction(
 }
 
 export async function signInWithGoogleAction(formData: FormData) {
-  const next = String(formData.get("next") ?? "/dashboard")
+  const next = safePath(String(formData.get("next") ?? ""))
   const supabase = await createClient()
   const origin = await siteOrigin()
 
@@ -97,6 +106,9 @@ export async function forgotPasswordAction(
   formData: FormData
 ): Promise<AuthState> {
   const email = String(formData.get("email") ?? "")
+
+  const limited = await rateLimit("forgot", 3, 15 * 60_000)
+  if (limited) return { error: limited }
 
   const eErr = await validateEmail(email, { checkMx: false })
   if (eErr) return { error: eErr }
