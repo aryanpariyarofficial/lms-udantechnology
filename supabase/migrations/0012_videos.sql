@@ -1,10 +1,7 @@
 -- ============================================================
---  0011 — Video content (tutorials + streams) & "admin" role
+--  0012 — Video content (tutorials + streams) & comments
+--  RUN THIS AFTER 0011 (which adds the 'admin' role) has committed.
 -- ============================================================
-
--- New 'admin' role: full edit access but NOT user creation/deletion/role-assignment
--- (those stay super_admin-only, enforced in app code).
-alter type public.user_role add value if not exists 'admin';
 
 do $$ begin
   create type public.video_kind as enum ('tutorial', 'stream');
