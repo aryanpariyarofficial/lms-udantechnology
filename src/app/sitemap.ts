@@ -3,6 +3,7 @@ import type { MetadataRoute } from "next"
 import { SITE } from "@/lib/constants"
 import { listCourses } from "@/lib/queries/courses"
 import { getPublishedBlogs } from "@/lib/queries/blog"
+import { listVideos } from "@/lib/queries/videos"
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = SITE.url
@@ -12,6 +13,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/courses",
     "/membership",
     "/blog",
+    "/tutorials",
+    "/streams",
+    "/tools",
+    "/about",
     "/verify",
     "/contact",
     "/login",
@@ -25,6 +30,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let courseRoutes: MetadataRoute.Sitemap = []
   let blogRoutes: MetadataRoute.Sitemap = []
+  let videoRoutes: MetadataRoute.Sitemap = []
 
   try {
     const courses = await listCourses()
@@ -50,5 +56,28 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     /* ignore */
   }
 
-  return [...staticRoutes, ...courseRoutes, ...blogRoutes]
+  try {
+    const [tutorials, streams] = await Promise.all([
+      listVideos("tutorial", { limit: 1000 }),
+      listVideos("stream", { limit: 1000 }),
+    ])
+    videoRoutes = [
+      ...tutorials.map((v) => ({
+        url: `${base}/tutorials/${v.slug}`,
+        lastModified: v.published_at ? new Date(v.published_at) : new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      })),
+      ...streams.map((v) => ({
+        url: `${base}/streams/${v.slug}`,
+        lastModified: v.published_at ? new Date(v.published_at) : new Date(),
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+      })),
+    ]
+  } catch {
+    /* ignore */
+  }
+
+  return [...staticRoutes, ...courseRoutes, ...blogRoutes, ...videoRoutes]
 }

@@ -12,6 +12,7 @@ import { formatDate } from "@/lib/format"
 export const metadata: Metadata = {
   title: "The Blog",
   description: "Tips, tutorials, and stories on learning skills for the Nepali market.",
+  alternates: { canonical: "/blog" },
 }
 
 export default async function BlogPage() {

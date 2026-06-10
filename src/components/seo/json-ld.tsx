@@ -17,7 +17,51 @@ export function organizationLd() {
     name: SITE.name,
     url: SITE.url,
     description: SITE.description,
+    logo: `${SITE.url}/brand/udan-logo.png`,
     sameAs: [] as string[],
+  }
+}
+
+export function breadcrumbLd(items: { name: string; path: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: `${SITE.url}${item.path}`,
+    })),
+  }
+}
+
+export function videoLd(video: {
+  title: string
+  description: string | null
+  slug: string
+  basePath: string
+  thumbnail: string | null
+  youtubeUrl: string
+  publishedAt: string | null
+  durationMinutes: number
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    name: video.title,
+    description: video.description ?? video.title,
+    url: `${SITE.url}${video.basePath}/${video.slug}`,
+    ...(video.thumbnail ? { thumbnailUrl: video.thumbnail } : {}),
+    embedUrl: video.youtubeUrl,
+    uploadDate: video.publishedAt ?? undefined,
+    ...(video.durationMinutes > 0
+      ? { duration: `PT${video.durationMinutes}M` }
+      : {}),
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      logo: { "@type": "ImageObject", url: `${SITE.url}/brand/udan-logo.png` },
+    },
   }
 }
 
@@ -59,7 +103,7 @@ export function courseLd(course: {
     ...(course.thumbnail ? { image: course.thumbnail } : {}),
     offers: {
       "@type": "Offer",
-      category: "Paid",
+      category: course.price > 0 ? "Paid" : "Free",
       price: course.price,
       priceCurrency: "NPR",
       availability: "https://schema.org/InStock",
@@ -95,9 +139,15 @@ export function articleLd(post: {
     headline: post.title,
     description: post.excerpt ?? post.title,
     url: `${SITE.url}/blog/${post.slug}`,
+    mainEntityOfPage: `${SITE.url}/blog/${post.slug}`,
     ...(post.cover ? { image: post.cover } : {}),
     datePublished: post.publishedAt ?? undefined,
+    dateModified: post.publishedAt ?? undefined,
     author: { "@type": "Person", name: post.author },
-    publisher: { "@type": "Organization", name: SITE.name },
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      logo: { "@type": "ImageObject", url: `${SITE.url}/brand/udan-logo.png` },
+    },
   }
 }

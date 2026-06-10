@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   title: "All Courses",
   description:
     "Browse project-based courses in web development, AI, design, marketing and more.",
+  alternates: { canonical: "/courses" },
 }
 
 const CATEGORIES = [

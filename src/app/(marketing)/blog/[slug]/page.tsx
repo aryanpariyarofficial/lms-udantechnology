@@ -26,7 +26,7 @@ import {
 } from "@/lib/queries/blog"
 import { extractToc, extractTocFromBlocks, blocksPlainText } from "@/lib/blog-toc"
 import { formatDate, initials, readingTime } from "@/lib/format"
-import { JsonLd, articleLd } from "@/components/seo/json-ld"
+import { JsonLd, articleLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { SITE } from "@/lib/constants"
 
 type Post = {
@@ -48,7 +48,19 @@ export async function generateMetadata({
   const { slug } = await params
   const post = (await getBlogBySlug(slug)) as Post | null
   if (!post) return { title: "Post not found" }
-  return { title: post.title, description: post.excerpt ?? undefined }
+  return {
+    title: post.title,
+    description: post.excerpt ?? undefined,
+    alternates: { canonical: `/blog/${slug}` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.excerpt ?? undefined,
+      publishedTime: post.published_at ?? undefined,
+      images: post.cover_url ? [post.cover_url] : undefined,
+    },
+    twitter: { card: "summary_large_image", title: post.title },
+  }
 }
 
 export default async function BlogPostPage({
@@ -82,6 +94,13 @@ export default async function BlogPostPage({
           publishedAt: post.published_at,
           author: authorName,
         })}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: post.title, path: `/blog/${slug}` },
+        ])}
       />
 
       {/* Breadcrumb */}

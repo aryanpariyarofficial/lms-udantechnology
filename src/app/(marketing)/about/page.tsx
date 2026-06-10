@@ -13,6 +13,7 @@ import type { PageContent } from "@/lib/content-schema"
 export const metadata: Metadata = {
   title: "About",
   description: `Learn about ${SITE.name} — our story, mission and the team behind it.`,
+  alternates: { canonical: "/about" },
 }
 
 function paragraphs(text: string): string[] {

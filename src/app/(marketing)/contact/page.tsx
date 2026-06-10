@@ -9,6 +9,7 @@ import { ContactForm } from "./contact-form"
 export const metadata: Metadata = {
   title: "Contact",
   description: "Get in touch with the UDAN Technology team.",
+  alternates: { canonical: "/contact" },
 }
 
 export default async function ContactPage() {

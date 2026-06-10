@@ -42,7 +42,7 @@ import {
 } from "@/lib/queries/courses"
 import { SAMPLE_COURSES, sampleCourseDetail } from "@/lib/sample-data"
 import { ReviewForm } from "./review-form"
-import { JsonLd, courseLd } from "@/components/seo/json-ld"
+import { JsonLd, courseLd, breadcrumbLd } from "@/components/seo/json-ld"
 import { formatPrice, formatMinutes, formatDuration, initials } from "@/lib/format"
 import { COURSE_LEVEL_LABELS, SITE } from "@/lib/constants"
 
@@ -180,11 +180,13 @@ export async function generateMetadata({
   return {
     title: vm.title,
     description: vm.subtitle ?? vm.description ?? undefined,
+    alternates: { canonical: `/courses/${slug}` },
     openGraph: {
       title: vm.title,
       description: vm.subtitle ?? undefined,
       images: vm.thumbnail ? [vm.thumbnail] : undefined,
     },
+    twitter: { card: "summary_large_image", title: vm.title },
   }
 }
 
@@ -212,6 +214,13 @@ export default async function CourseDetailPage({
           reviewCount: vm.reviewCount,
           instructor: vm.instructor.name,
         })}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: "Courses", path: "/courses" },
+          { name: vm.title, path: `/courses/${vm.slug}` },
+        ])}
       />
       {/* Hero */}
       <div className="border-b bg-muted/30">

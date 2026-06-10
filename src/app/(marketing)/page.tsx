@@ -55,6 +55,10 @@ import { initials } from "@/lib/format"
 import { JsonLd, organizationLd, websiteLd } from "@/components/seo/json-ld"
 import type { MembershipPlan } from "@/lib/supabase/types"
 
+export const metadata = {
+  alternates: { canonical: "/" },
+}
+
 const CATEGORIES: { name: string; slug: string; icon: LucideIcon }[] = [
   { name: "Web Development", slug: "web-development", icon: Code },
   { name: "AI", slug: "ai", icon: Brain },

@@ -17,6 +17,7 @@ import {
   initials,
 } from "@/lib/format"
 import { SITE } from "@/lib/constants"
+import { JsonLd, videoLd, breadcrumbLd } from "@/components/seo/json-ld"
 import type { VideoKind } from "@/lib/supabase/types"
 
 type VideoFull = {
@@ -25,6 +26,7 @@ type VideoFull = {
   slug: string
   description: string | null
   youtube_url: string
+  thumbnail_url?: string | null
   category: string | null
   duration_minutes: number
   published_at: string | null
@@ -53,6 +55,25 @@ export async function VideoSingle({
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <JsonLd
+        data={videoLd({
+          title: video.title,
+          description: video.description,
+          slug: video.slug,
+          basePath: base,
+          thumbnail: video.thumbnail_url ?? youtubeThumbnail(video.youtube_url),
+          youtubeUrl: video.youtube_url,
+          publishedAt: video.published_at,
+          durationMinutes: video.duration_minutes,
+        })}
+      />
+      <JsonLd
+        data={breadcrumbLd([
+          { name: "Home", path: "/" },
+          { name: label, path: base },
+          { name: video.title, path: `${base}/${video.slug}` },
+        ])}
+      />
       {/* Breadcrumb */}
       <nav className="mb-5 flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
         <Link href="/" className="hover:text-foreground">Home</Link>

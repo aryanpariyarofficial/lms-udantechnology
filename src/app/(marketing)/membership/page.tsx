@@ -16,6 +16,7 @@ export const metadata: Metadata = {
   title: "Membership Plans",
   description:
     "One affordable membership to access all included courses and new content.",
+  alternates: { canonical: "/membership" },
 }
 
 const FALLBACK_PLANS: Pick<

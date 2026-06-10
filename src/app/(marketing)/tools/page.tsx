@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: "Free Tools & Resources",
   description:
     "Handy free tools to help you learn and build — color pickers, code playgrounds, image tools and more.",
+  alternates: { canonical: "/tools" },
 }
 
 const TOOLS: {

@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 
 import { getVideoBySlug } from "@/lib/queries/videos"
 import { VideoSingle } from "@/components/videos/video-single"
+import { youtubeThumbnail } from "@/lib/format"
 
 export async function generateMetadata({
   params,
@@ -10,9 +11,26 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const v = (await getVideoBySlug("stream", slug)) as { title: string; description: string | null } | null
+  const v = (await getVideoBySlug("stream", slug)) as {
+    title: string
+    description: string | null
+    thumbnail_url: string | null
+    youtube_url: string
+  } | null
   if (!v) return { title: "Stream not found" }
-  return { title: v.title, description: v.description ?? undefined }
+  const image = v.thumbnail_url ?? youtubeThumbnail(v.youtube_url)
+  return {
+    title: v.title,
+    description: v.description ?? undefined,
+    alternates: { canonical: `/streams/${slug}` },
+    openGraph: {
+      type: "video.other",
+      title: v.title,
+      description: v.description ?? undefined,
+      images: image ? [image] : undefined,
+    },
+    twitter: { card: "summary_large_image", title: v.title },
+  }
 }
 
 export default async function StreamPage({

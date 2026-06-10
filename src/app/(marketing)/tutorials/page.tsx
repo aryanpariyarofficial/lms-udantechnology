@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   title: "Free Tutorials",
   description:
     "Free video tutorials on web development, AI, design, marketing and more — basic to advanced.",
+  alternates: { canonical: "/tutorials" },
 }
 
 export default async function TutorialsPage({

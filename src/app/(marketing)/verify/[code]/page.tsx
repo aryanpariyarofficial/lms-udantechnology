@@ -9,7 +9,10 @@ import { getCertificateByCode } from "@/lib/queries/certificates"
 import { formatDate } from "@/lib/format"
 import { SITE } from "@/lib/constants"
 
-export const metadata: Metadata = { title: "Certificate Verification" }
+export const metadata: Metadata = {
+  title: "Certificate Verification",
+  robots: { index: false, follow: true },
+}
 
 export default async function VerifyCodePage({
   params,
