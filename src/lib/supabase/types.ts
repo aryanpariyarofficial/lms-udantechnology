@@ -14,7 +14,13 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export type UserRole = "super_admin" | "instructor" | "student" | "membership_user"
+export type UserRole =
+  | "super_admin"
+  | "admin"
+  | "instructor"
+  | "student"
+  | "membership_user"
+export type VideoKind = "tutorial" | "stream"
 export type CourseLevel = "beginner" | "intermediate" | "advanced" | "all_levels"
 export type CourseStatus = "draft" | "published" | "archived"
 export type LessonType = "video" | "pdf" | "assignment" | "quiz" | "file" | "text"
@@ -495,6 +501,49 @@ export interface Database {
           is_active?: boolean
         }
       >
+      videos: Table<
+        {
+          id: string
+          kind: VideoKind
+          title: string
+          slug: string
+          description: string | null
+          youtube_url: string
+          thumbnail_url: string | null
+          category: string | null
+          tags: string[]
+          duration_minutes: number
+          author_id: string | null
+          status: ContentStatus
+          published_at: string | null
+          created_at: string
+          updated_at: string
+        },
+        {
+          kind: VideoKind
+          title: string
+          slug: string
+          description?: string | null
+          youtube_url: string
+          thumbnail_url?: string | null
+          category?: string | null
+          tags?: string[]
+          duration_minutes?: number
+          author_id?: string | null
+          status?: ContentStatus
+          published_at?: string | null
+        }
+      >
+      video_comments: Table<
+        {
+          id: string
+          video_id: string
+          user_id: string
+          body: string
+          created_at: string
+        },
+        { video_id: string; user_id: string; body: string }
+      >
     }
     Views: {
       course_outline: {
@@ -549,6 +598,7 @@ export interface Database {
       review_status: ReviewStatus
       content_status: ContentStatus
       coupon_type: CouponType
+      video_kind: VideoKind
     }
   }
 }
@@ -571,4 +621,5 @@ export type Payment = Database["public"]["Tables"]["payments"]["Row"]
 export type Review = Database["public"]["Tables"]["reviews"]["Row"]
 export type Notification = Database["public"]["Tables"]["notifications"]["Row"]
 export type Blog = Database["public"]["Tables"]["blogs"]["Row"]
+export type Video = Database["public"]["Tables"]["videos"]["Row"]
 export type CourseOutlineRow = Database["public"]["Views"]["course_outline"]["Row"]

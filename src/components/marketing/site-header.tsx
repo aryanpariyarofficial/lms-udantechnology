@@ -7,12 +7,12 @@ import { AccountMenu } from "@/components/marketing/account-menu"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { MARKETING_NAV_ICONS } from "@/components/marketing/nav-icons"
 import { MAIN_NAV } from "@/lib/constants"
-import { getCurrentUser } from "@/lib/auth"
+import { getCurrentUser, isAdmin as checkIsAdmin } from "@/lib/auth"
 
 export async function SiteHeader() {
   const current = await getCurrentUser()
   const isAuthed = !!current
-  const isAdmin = current?.profile?.role === "super_admin"
+  const isAdmin = checkIsAdmin(current?.profile ?? null)
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/85 backdrop-blur supports-[backdrop-filter]:bg-background/65">

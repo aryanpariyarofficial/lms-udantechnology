@@ -159,6 +159,7 @@ function StudentRow({
                   <option value="student">Student</option>
                   <option value="membership_user">Membership user</option>
                   <option value="instructor">Instructor</option>
+                  <option value="admin">Admin</option>
                   <option value="super_admin">Super admin</option>
                 </select>
               </div>

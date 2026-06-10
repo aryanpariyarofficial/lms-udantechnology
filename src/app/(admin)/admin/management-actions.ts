@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache"
 
 import { createClient } from "@/lib/supabase/server"
-import { requireAdmin } from "@/lib/auth"
+import { requireAdmin, requireSuperAdmin } from "@/lib/auth"
 import { slugify } from "@/lib/format"
 import type { CourseStatus, ReviewStatus, UserRole } from "@/lib/supabase/types"
 
@@ -48,7 +48,8 @@ export async function toggleSuspend(userId: string, suspend: boolean): Promise<R
 }
 
 export async function setRole(userId: string, role: UserRole): Promise<Result> {
-  await requireAdmin()
+  // Only the super admin can assign roles.
+  await requireSuperAdmin()
   const supabase = await createClient()
   const { error } = await supabase.from("profiles").update({ role }).eq("id", userId)
   if (error) return { ok: false, error: error.message }

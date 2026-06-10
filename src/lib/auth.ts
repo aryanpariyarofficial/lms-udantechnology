@@ -40,29 +40,43 @@ export async function requireUser(nextPath?: string) {
   return current
 }
 
-/** Require a super_admin. Redirects students/instructors away. */
+/** Require an admin (super_admin OR admin). Redirects others away. */
 export async function requireAdmin() {
   const current = await requireUser("/admin")
-  if (current.profile?.role !== "super_admin") {
+  const role = current.profile?.role
+  if (role !== "super_admin" && role !== "admin") {
     redirect("/dashboard")
   }
   return current
 }
 
-/** Require staff (super_admin or instructor). */
+/** Require the super admin — for user role assignment / deletion only. */
+export async function requireSuperAdmin() {
+  const current = await requireUser("/admin")
+  if (current.profile?.role !== "super_admin") {
+    redirect("/admin")
+  }
+  return current
+}
+
+/** Require staff (super_admin, admin, or instructor). */
 export async function requireStaff() {
   const current = await requireUser("/admin")
   const role = current.profile?.role
-  if (role !== "super_admin" && role !== "instructor") {
+  if (role !== "super_admin" && role !== "admin" && role !== "instructor") {
     redirect("/dashboard")
   }
   return current
 }
 
 export function isAdmin(profile: Profile | null): boolean {
-  return profile?.role === "super_admin"
+  return profile?.role === "super_admin" || profile?.role === "admin"
 }
 
 export function isStaff(profile: Profile | null): boolean {
-  return profile?.role === "super_admin" || profile?.role === "instructor"
+  return (
+    profile?.role === "super_admin" ||
+    profile?.role === "admin" ||
+    profile?.role === "instructor"
+  )
 }

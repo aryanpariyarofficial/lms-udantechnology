@@ -55,6 +55,8 @@ export const ADMIN_NAV = [
   { label: "Coupons", href: "/admin/coupons", icon: "Ticket" },
   { label: "Reviews", href: "/admin/reviews", icon: "Star" },
   { label: "Blog", href: "/admin/blog", icon: "Newspaper" },
+  { label: "Tutorials", href: "/admin/tutorials", icon: "MonitorPlay" },
+  { label: "Streams", href: "/admin/streams", icon: "Radio" },
   { label: "Messages", href: "/admin/messages", icon: "Mail" },
   { label: "Settings", href: "/admin/settings", icon: "Settings" },
 ] as const

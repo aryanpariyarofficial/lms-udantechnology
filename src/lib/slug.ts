@@ -11,7 +11,7 @@ import { slugify } from "@/lib/format"
  */
 export async function uniqueSlug(
   supabase: SupabaseClient<Database>,
-  table: "blogs" | "courses",
+  table: "blogs" | "courses" | "videos",
   rawBase: string,
   currentId?: string
 ): Promise<string> {

@@ -14,6 +14,8 @@ import {
   Mail,
   Bell,
   Ticket,
+  MonitorPlay,
+  Radio,
   type LucideIcon,
 } from "lucide-react"
 
@@ -33,4 +35,6 @@ export const NAV_ICONS: Record<string, LucideIcon> = {
   Mail,
   Bell,
   Ticket,
+  MonitorPlay,
+  Radio,
 }

@@ -67,6 +67,16 @@ export function youtubeEmbedUrl(input: string | null | undefined): string | null
   return `https://www.youtube-nocookie.com/embed/${id}?${params.toString()}`
 }
 
+/** YouTube thumbnail URL from a video URL/id (hqdefault is always available). */
+export function youtubeThumbnail(
+  input: string | null | undefined,
+  quality: "hq" | "maxres" = "hq"
+): string | null {
+  const id = youtubeId(input)
+  if (!id) return null
+  return `https://i.ytimg.com/vi/${id}/${quality === "maxres" ? "maxresdefault" : "hqdefault"}.jpg`
+}
+
 /** Build a slug from a title. */
 export function slugify(text: string): string {
   return text

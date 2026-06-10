@@ -81,12 +81,14 @@ function SidebarBody({
 }) {
   const roleLabel =
     user.role === "super_admin"
-      ? "Admin"
-      : user.role === "instructor"
-        ? "Instructor"
-        : user.role === "membership_user"
-          ? "Member"
-          : "Student"
+      ? "Super Admin"
+      : user.role === "admin"
+        ? "Admin"
+        : user.role === "instructor"
+          ? "Instructor"
+          : user.role === "membership_user"
+            ? "Member"
+            : "Student"
 
   return (
     <div className="flex h-full flex-col gap-4 p-4">
@@ -120,7 +122,7 @@ function SidebarBody({
               <ArrowLeft className="size-4" /> Student view
             </Link>
           </Button>
-        ) : user.role === "super_admin" ? (
+        ) : user.role === "super_admin" || user.role === "admin" ? (
           <Button asChild variant="ghost" size="sm" className="w-full justify-start gap-2">
             <Link href="/admin">
               <NAV_ICONS.LayoutDashboard className="size-4" /> Admin panel
