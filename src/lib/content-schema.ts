@@ -7,7 +7,7 @@
 export type ContentField = {
   key: string
   label: string
-  type: "text" | "textarea"
+  type: "text" | "textarea" | "image"
   default: string
 }
 export type ContentSection = { title: string; fields: ContentField[] }
@@ -15,6 +15,7 @@ export type ContentPage = { key: string; label: string; description: string; sec
 
 const t = (key: string, label: string, def: string): ContentField => ({ key, label, type: "text", default: def })
 const ta = (key: string, label: string, def: string): ContentField => ({ key, label, type: "textarea", default: def })
+const img = (key: string, label: string): ContentField => ({ key, label, type: "image", default: "" })
 
 export const CONTENT_PAGES: ContentPage[] = [
   {
@@ -110,34 +111,71 @@ export const CONTENT_PAGES: ContentPage[] = [
   {
     key: "about",
     label: "About page",
-    description: "Your story, mission and values.",
+    description: "Hero, story, mission, CTA card and founders.",
     sections: [
       {
         title: "Hero",
         fields: [
           t("hero_heading", "Heading", "About UDAN Technology"),
-          ta("hero_subheading", "Subheading", "We're on a mission to make practical, job-ready skills accessible and affordable for every Nepali learner."),
+          ta("hero_subheading", "Subheading", "UDAN Technology helps people in many ways — from short video tutorials to complete courses. Learn in-demand skills, build real projects, and change your future."),
+          img("hero_bg", "Background image (optional)"),
         ],
       },
       {
         title: "Our story",
         fields: [
-          t("story_title", "Title", "Our story"),
-          ta("story_body", "Body", "UDAN Technology started with a simple belief: quality education should not be a privilege. We build project-based courses in Nepali so anyone, anywhere in Nepal, can learn in-demand digital skills and grow their career — without breaking the bank."),
+          t("story_title", "Title", "Our Story"),
+          ta("story_body", "Body (one paragraph per line)", "Our story begins with the end in mind. At UDAN Technology we wanted to build a platform where there is enough for all — whether you're an absolute beginner or an experienced enthusiast who wants to explore, design and build.\nWe are here to offer you an opportunity to learn web development, AI, design, marketing and more — everything you want to learn, in Nepali.\nWe've spent endless hours preparing courses that make self-paced learning easy and focus on delivering the content in the simplest way possible.\nLet your fingers do the walking through UDAN Technology — and yes, many resources are completely free!"),
         ],
       },
       {
         title: "Our mission",
         fields: [
-          t("mission_title", "Title", "Our mission"),
-          ta("mission_body", "Body", "To empower the youth of Nepal with practical digital skills, affordable memberships, and verifiable certificates — helping them find jobs, freelance, and build their future."),
+          t("mission_title", "Title", "Our Mission"),
+          ta("mission_body", "Body (one paragraph per line)", "We built this platform with one mission: to empower our youth with the skills they can use to start their career in web design, development, AI and marketing — as an employee at a firm or as a freelancer working from home.\nLet's join hands, contribute, and give back to society."),
+          t("mission_quote", "Highlight quote", "Freedom to learn and grow — this is it!"),
         ],
       },
       {
-        title: "Call-to-action",
+        title: "CTA card (middle)",
         fields: [
-          t("cta_heading", "Heading", "Ready to grow with us?"),
-          t("cta_button", "Button", "Browse Courses"),
+          t("cta_heading", "Heading", "Ready to start your journey?"),
+          ta("cta_text", "Text", "Join thousands of Nepali learners building real, job-ready skills. Start free today."),
+          t("cta_button", "Button label", "Browse Courses"),
+          t("cta_link", "Button link", "/courses"),
+        ],
+      },
+      {
+        title: "Founders — section header",
+        fields: [
+          t("founders_title", "Title", "Founders"),
+          ta("founders_intro", "Intro", "UDAN Technology is an idea and dream of passionate youngsters from Nepal who worked day and night to bring this dream into reality."),
+        ],
+      },
+      {
+        title: "Founder 1",
+        fields: [
+          img("founder1_image", "Photo"),
+          t("founder1_name", "Name", "Founder Name"),
+          t("founder1_role", "Role", "Founder & CEO"),
+          ta("founder1_bio", "Bio", "A full-stack developer and lifelong learner. With years of experience building websites and digital products, leading UDAN Technology's vision to make quality education accessible to all."),
+          t("founder1_facebook", "Facebook URL", ""),
+          t("founder1_twitter", "Twitter / X URL", ""),
+          t("founder1_linkedin", "LinkedIn URL", ""),
+          t("founder1_website", "Website URL", ""),
+        ],
+      },
+      {
+        title: "Founder 2",
+        fields: [
+          img("founder2_image", "Photo"),
+          t("founder2_name", "Name", "Co-Founder Name"),
+          t("founder2_role", "Role", "Co-Founder & CMO"),
+          ta("founder2_bio", "Bio", "A digital marketer by passion and an SEO specialist with years of experience serving top brands. Wearing multiple hats to grow UDAN Technology and the community around it."),
+          t("founder2_facebook", "Facebook URL", ""),
+          t("founder2_twitter", "Twitter / X URL", ""),
+          t("founder2_linkedin", "LinkedIn URL", ""),
+          t("founder2_website", "Website URL", ""),
         ],
       },
     ],

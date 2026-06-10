@@ -1,6 +1,6 @@
 "use client"
 
-import { useActionState } from "react"
+import { useActionState, useState } from "react"
 import { useFormStatus } from "react-dom"
 import { Loader2 } from "lucide-react"
 
@@ -10,8 +10,19 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ImageUpload } from "@/components/cloudinary/image-upload"
 import { saveContent, type Result } from "../actions"
-import type { ContentSection, PageContent } from "@/lib/content-schema"
+import type { ContentField, ContentSection, PageContent } from "@/lib/content-schema"
+
+function ImageField({ field, initial }: { field: ContentField; initial: string }) {
+  const [value, setValue] = useState<string | null>(initial || null)
+  return (
+    <div className="max-w-xs">
+      <ImageUpload value={value} onChange={setValue} />
+      <input type="hidden" name={field.key} value={value ?? ""} />
+    </div>
+  )
+}
 
 function SaveButton() {
   const { pending } = useFormStatus()
@@ -59,11 +70,13 @@ export function ContentForm({
             {section.fields.map((field) => (
               <div key={field.key} className="space-y-2">
                 <Label htmlFor={field.key}>{field.label}</Label>
-                {field.type === "textarea" ? (
+                {field.type === "image" ? (
+                  <ImageField field={field} initial={values[field.key] ?? ""} />
+                ) : field.type === "textarea" ? (
                   <Textarea
                     id={field.key}
                     name={field.key}
-                    rows={3}
+                    rows={field.key.endsWith("_body") ? 5 : 3}
                     defaultValue={values[field.key] ?? field.default}
                   />
                 ) : (
