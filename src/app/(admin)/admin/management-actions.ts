@@ -144,6 +144,25 @@ export async function markMessageRead(id: string, read: boolean): Promise<Result
   return { ok: true }
 }
 
+// ---------- Leads ----------
+export async function markLeadRead(id: string, read: boolean): Promise<Result> {
+  await requireAdmin()
+  const supabase = await createClient()
+  const { error } = await supabase.from("leads").update({ is_read: read }).eq("id", id)
+  if (error) return { ok: false, error: error.message }
+  revalidatePath("/admin/leads")
+  return { ok: true }
+}
+
+export async function deleteLead(id: string): Promise<Result> {
+  await requireAdmin()
+  const supabase = await createClient()
+  const { error } = await supabase.from("leads").delete().eq("id", id)
+  if (error) return { ok: false, error: error.message }
+  revalidatePath("/admin/leads")
+  return { ok: true }
+}
+
 // ---------- Membership plans ----------
 function planFields(formData: FormData) {
   const features = String(formData.get("features") ?? "")

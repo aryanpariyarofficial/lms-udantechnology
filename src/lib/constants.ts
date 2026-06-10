@@ -50,6 +50,7 @@ export const ADMIN_NAV = [
   { label: "Courses", href: "/admin/courses", icon: "BookOpen" },
   { label: "Categories", href: "/admin/categories", icon: "Tags" },
   { label: "Students", href: "/admin/students", icon: "Users" },
+  { label: "Leads", href: "/admin/leads", icon: "UserPlus" },
   { label: "Payments", href: "/admin/payments", icon: "CreditCard" },
   { label: "Memberships", href: "/admin/memberships", icon: "Crown" },
   { label: "Coupons", href: "/admin/coupons", icon: "Ticket" },

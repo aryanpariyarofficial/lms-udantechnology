@@ -109,6 +109,20 @@ export async function getActiveMemberships() {
   }
 }
 
+// ---------- Leads ----------
+export async function getLeads() {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from("leads")
+      .select("*")
+      .order("created_at", { ascending: false })
+    return data ?? []
+  } catch {
+    return []
+  }
+}
+
 // ---------- Coupons ----------
 export async function getCoupons() {
   try {

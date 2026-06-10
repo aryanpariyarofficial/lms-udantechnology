@@ -544,6 +544,28 @@ export interface Database {
         },
         { video_id: string; user_id: string; body: string }
       >
+      leads: Table<
+        {
+          id: string
+          full_name: string
+          email: string
+          phone: string | null
+          city: string | null
+          course_id: string | null
+          interested_course: string | null
+          is_read: boolean
+          created_at: string
+        },
+        {
+          full_name: string
+          email: string
+          phone?: string | null
+          city?: string | null
+          course_id?: string | null
+          interested_course?: string | null
+          is_read?: boolean
+        }
+      >
     }
     Views: {
       course_outline: {

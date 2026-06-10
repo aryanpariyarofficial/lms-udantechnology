@@ -216,6 +216,21 @@ export async function getCategories(): Promise<CourseCategory[]> {
   }
 }
 
+/** Lightweight list of published courses (id + title) for pickers/dropdowns. */
+export async function getPublicCourseOptions(): Promise<{ id: string; title: string }[]> {
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from("courses")
+      .select("id, title")
+      .eq("status", "published")
+      .order("title")
+    return data ?? []
+  } catch {
+    return []
+  }
+}
+
 /** Whether the signed-in user can access a course's content. */
 export async function checkCourseAccess(courseId: string): Promise<boolean> {
   try {

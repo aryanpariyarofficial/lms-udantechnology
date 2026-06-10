@@ -17,6 +17,7 @@ import {
   MonitorPlay,
   Radio,
   FileText,
+  UserPlus,
   type LucideIcon,
 } from "lucide-react"
 
@@ -39,4 +40,5 @@ export const NAV_ICONS: Record<string, LucideIcon> = {
   MonitorPlay,
   Radio,
   FileText,
+  UserPlus,
 }
