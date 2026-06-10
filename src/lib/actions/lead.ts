@@ -1,8 +1,11 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { phoneProblem, nameProblem } from "@/lib/validation/email"
+import { validateEmail } from "@/lib/validation/email-server"
 
-export type LeadState = { ok: boolean; error?: string }
+export type LeadField = "full_name" | "email" | "phone"
+export type LeadState = { ok: boolean; error?: string; field?: LeadField }
 
 export async function submitLead(formData: FormData): Promise<LeadState> {
   const full_name = String(formData.get("full_name") ?? "").trim()
@@ -12,8 +15,12 @@ export async function submitLead(formData: FormData): Promise<LeadState> {
   const courseId = String(formData.get("course_id") ?? "").trim()
   const interested = String(formData.get("interested_course") ?? "").trim()
 
-  if (!full_name) return { ok: false, error: "Please enter your name." }
-  if (!/^\S+@\S+\.\S+$/.test(email)) return { ok: false, error: "Enter a valid email." }
+  const nErr = nameProblem(full_name)
+  if (nErr) return { ok: false, error: nErr, field: "full_name" }
+  const eErr = await validateEmail(email)
+  if (eErr) return { ok: false, error: eErr, field: "email" }
+  const pErr = phoneProblem(phone)
+  if (pErr) return { ok: false, error: pErr, field: "phone" }
 
   try {
     const supabase = await createClient()

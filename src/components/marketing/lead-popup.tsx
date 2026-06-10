@@ -2,30 +2,29 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { User, Mail, Phone, MapPin, Loader2, CheckCircle2, X } from "lucide-react"
+import { User, Mail, Phone, MapPin, Loader2, CheckCircle2, X, AlertCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { submitLead } from "@/lib/actions/lead"
+import { nameProblem, emailProblem, phoneProblem } from "@/lib/validation/email"
 
 const STORAGE_KEY = "udan_lead_popup"
 const COOLDOWN_DAYS = 3
 const DELAY_MS = 5000
 
 type CourseOption = { id: string; title: string }
+type Errors = { full_name?: string; email?: string; phone?: string }
 
 export function LeadPopup({ courses }: { courses: CourseOption[] }) {
   const [open, setOpen] = useState(false)
   const [done, setDone] = useState(false)
   const [pending, setPending] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [errors, setErrors] = useState<Errors>({})
 
   useEffect(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const ts = Number(raw)
-        if (Date.now() - ts < COOLDOWN_DAYS * 86400_000) return
-      }
+      if (raw && Date.now() - Number(raw) < COOLDOWN_DAYS * 86400_000) return
     } catch {
       /* ignore */
     }
@@ -33,8 +32,7 @@ export function LeadPopup({ courses }: { courses: CourseOption[] }) {
     return () => clearTimeout(timer)
   }, [])
 
-  function dismiss() {
-    setOpen(false)
+  function remember() {
     try {
       localStorage.setItem(STORAGE_KEY, String(Date.now()))
     } catch {
@@ -42,35 +40,55 @@ export function LeadPopup({ courses }: { courses: CourseOption[] }) {
     }
   }
 
+  function dismiss() {
+    setOpen(false)
+    remember()
+  }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    setPending(true)
-    setError(null)
     const form = new FormData(e.currentTarget)
+    const full_name = String(form.get("full_name") ?? "")
+    const email = String(form.get("email") ?? "")
+    const phone = String(form.get("phone") ?? "")
+
+    const errs: Errors = {}
+    const n = nameProblem(full_name)
+    if (n) errs.full_name = n
+    const em = emailProblem(email)
+    if (em) errs.email = em
+    const ph = phoneProblem(phone)
+    if (ph) errs.phone = ph
+    if (Object.keys(errs).length) {
+      setErrors(errs)
+      return
+    }
+    setErrors({})
+
+    setPending(true)
     const id = String(form.get("course_id") ?? "")
     form.set("interested_course", courses.find((c) => c.id === id)?.title ?? "")
     const res = await submitLead(form)
     setPending(false)
     if (res.ok) {
       setDone(true)
-      try {
-        localStorage.setItem(STORAGE_KEY, String(Date.now()))
-      } catch {
-        /* ignore */
-      }
+      remember()
+    } else if (res.field) {
+      setErrors({ [res.field]: res.error })
     } else {
-      setError(res.error ?? "Failed")
+      setErrors({ email: res.error })
     }
   }
+
+  const clear = (field: keyof Errors) => () =>
+    setErrors((p) => ({ ...p, [field]: undefined }))
 
   if (!open) return null
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Backdrop */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={dismiss} />
 
-      {/* Modal */}
       <div className="relative z-10 grid w-full max-w-3xl overflow-hidden rounded-2xl bg-card shadow-2xl md:grid-cols-2">
         <button
           onClick={dismiss}
@@ -103,18 +121,15 @@ export function LeadPopup({ courses }: { courses: CourseOption[] }) {
                 Leave your details and we&apos;ll help you pick the right course.
               </p>
 
-              <form onSubmit={onSubmit} className="mt-5 space-y-3">
-                {error && (
-                  <p className="rounded-md bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>
-                )}
-                <Field icon={User}>
-                  <input name="full_name" required placeholder="Full Name" className="lead-input" />
+              <form onSubmit={onSubmit} noValidate className="mt-5 space-y-3">
+                <Field icon={User} error={errors.full_name}>
+                  <input name="full_name" placeholder="Full Name" className="lead-input" onChange={clear("full_name")} />
                 </Field>
-                <Field icon={Mail}>
-                  <input name="email" type="email" required placeholder="Email Address" className="lead-input" />
+                <Field icon={Mail} error={errors.email}>
+                  <input name="email" type="email" placeholder="Email Address" className="lead-input" onChange={clear("email")} />
                 </Field>
-                <Field icon={Phone}>
-                  <input name="phone" placeholder="Phone Number" className="lead-input" />
+                <Field icon={Phone} error={errors.phone}>
+                  <input name="phone" placeholder="Phone Number" className="lead-input" onChange={clear("phone")} />
                 </Field>
                 <Field icon={MapPin}>
                   <input name="city" placeholder="City" className="lead-input" />
@@ -138,11 +153,28 @@ export function LeadPopup({ courses }: { courses: CourseOption[] }) {
   )
 }
 
-function Field({ icon: Icon, children }: { icon: typeof User; children: React.ReactNode }) {
+function Field({
+  icon: Icon,
+  error,
+  children,
+}: {
+  icon: typeof User
+  error?: string
+  children: React.ReactNode
+}) {
   return (
-    <div className="relative">
-      <Icon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-      <div className="[&>input]:pl-9">{children}</div>
+    <div className="space-y-1">
+      <div className="relative">
+        <Icon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <div className={`[&>input]:pl-9 ${error ? "[&>input]:border-destructive" : ""}`}>
+          {children}
+        </div>
+      </div>
+      {error && (
+        <p className="flex items-center gap-1 text-xs text-destructive">
+          <AlertCircle className="size-3 shrink-0" /> {error}
+        </p>
+      )}
     </div>
   )
 }

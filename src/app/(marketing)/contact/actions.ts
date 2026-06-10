@@ -1,6 +1,7 @@
 "use server"
 
 import { createClient } from "@/lib/supabase/server"
+import { validateEmail } from "@/lib/validation/email-server"
 
 export type ContactState = { error?: string; message?: string }
 
@@ -13,9 +14,11 @@ export async function sendContactAction(
   const subject = String(formData.get("subject") ?? "").trim()
   const message = String(formData.get("message") ?? "").trim()
 
-  if (!name || !email || !message) {
-    return { error: "Please fill in your name, email, and message." }
+  if (!name || !message) {
+    return { error: "Please fill in your name and message." }
   }
+  const eErr = await validateEmail(email)
+  if (eErr) return { error: eErr }
 
   try {
     const supabase = await createClient()

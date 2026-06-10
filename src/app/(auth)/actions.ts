@@ -6,6 +6,8 @@ import { headers } from "next/headers"
 
 import { createClient } from "@/lib/supabase/server"
 import { SITE } from "@/lib/constants"
+import { nameProblem } from "@/lib/validation/email"
+import { validateEmail } from "@/lib/validation/email-server"
 
 export type AuthState = { error?: string; message?: string }
 
@@ -42,6 +44,11 @@ export async function signUpAction(
   const fullName = String(formData.get("fullName") ?? "")
   const email = String(formData.get("email") ?? "")
   const password = String(formData.get("password") ?? "")
+
+  const nErr = nameProblem(fullName)
+  if (nErr) return { error: nErr }
+  const eErr = await validateEmail(email)
+  if (eErr) return { error: eErr }
 
   const supabase = await createClient()
   const origin = await siteOrigin()
@@ -90,6 +97,10 @@ export async function forgotPasswordAction(
   formData: FormData
 ): Promise<AuthState> {
   const email = String(formData.get("email") ?? "")
+
+  const eErr = await validateEmail(email, { checkMx: false })
+  if (eErr) return { error: eErr }
+
   const supabase = await createClient()
   const origin = await siteOrigin()
 
