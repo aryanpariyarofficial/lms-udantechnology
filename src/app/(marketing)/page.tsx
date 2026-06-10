@@ -42,7 +42,7 @@ import { CourseCard, sampleToCardData, toCardData } from "@/components/marketing
 import { PricingCard } from "@/components/marketing/pricing-card"
 import { HeroVideo } from "@/components/marketing/hero-video"
 import { getFeaturedCourses, getActivePlans } from "@/lib/queries/courses"
-import { getSettings } from "@/lib/queries/settings"
+import { getPageContent } from "@/lib/queries/content"
 import {
   SAMPLE_COURSES,
   SAMPLE_REVIEWS,
@@ -91,10 +91,10 @@ const STAT_ICONS: Record<string, LucideIcon> = {
 }
 
 export default async function HomePage() {
-  const [dbCourses, dbPlans, settings] = await Promise.all([
+  const [dbCourses, dbPlans, c] = await Promise.all([
     getFeaturedCourses(6),
     getActivePlans(),
-    getSettings(),
+    getPageContent("home"),
   ])
 
   const courses =
@@ -116,18 +116,18 @@ export default async function HomePage() {
           <div className="mx-auto max-w-3xl text-center">
             <Badge className="mb-5 gap-1.5 border-white/20 bg-white/10 text-white backdrop-blur">
               <span className="inline-block size-1.5 rounded-full bg-success" />
-              Nepal&apos;s practical learning platform
+              {c.hero_badge}
             </Badge>
             <h1 className="text-balance text-4xl font-bold tracking-tight text-white drop-shadow-sm sm:text-5xl lg:text-6xl">
-              {settings.hero_heading}
+              {c.hero_heading}
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-balance text-lg text-white/85">
-              {settings.hero_subheading}
+              {c.hero_subheading}
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild size="lg" className="gap-2">
                 <Link href="/courses">
-                  Browse Courses <ArrowRight className="size-4" />
+                  {c.hero_cta_primary} <ArrowRight className="size-4" />
                 </Link>
               </Button>
               <Button
@@ -136,7 +136,7 @@ export default async function HomePage() {
                 variant="outline"
                 className="border-white/30 bg-white/5 text-white backdrop-blur hover:bg-white/15 hover:text-white"
               >
-                <Link href="/membership">View Memberships</Link>
+                <Link href="/membership">{c.hero_cta_secondary}</Link>
               </Button>
             </div>
           </div>
@@ -173,10 +173,10 @@ export default async function HomePage() {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Explore categories
+              {c.categories_title}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Find the right path for your goals
+              {c.categories_subtitle}
             </p>
           </div>
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
@@ -207,15 +207,12 @@ export default async function HomePage() {
               <Sparkles className="size-3.5 text-primary" /> New here?
             </Badge>
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              New to digital skills? Start free.
+              {c.start_heading}
             </h2>
-            <p className="text-muted-foreground">
-              Begin with our beginner-friendly path — learn the fundamentals of web
-              development, design, and AI step by step, in Nepali. No experience needed.
-            </p>
+            <p className="text-muted-foreground">{c.start_text}</p>
             <Button asChild size="lg" className="mt-1">
               <Link href="/courses">
-                Start Learning <ArrowRight className="size-4" />
+                {c.start_button} <ArrowRight className="size-4" />
               </Link>
             </Button>
           </div>
@@ -231,10 +228,10 @@ export default async function HomePage() {
           <div className="mb-8 flex items-end justify-between">
             <div>
               <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-                Featured courses
+                {c.featured_title}
               </h2>
               <p className="mt-2 text-muted-foreground">
-                Hand-picked courses to kickstart your journey
+                {c.featured_subtitle}
               </p>
             </div>
             <Button asChild variant="ghost" className="hidden sm:inline-flex">
@@ -254,10 +251,10 @@ export default async function HomePage() {
         <div className="mb-8 flex items-end justify-between">
           <div>
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Popular tutorials
+              {c.tutorials_title}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Free single-video tutorials and crash courses for quick wins.
+              {c.tutorials_subtitle}
             </p>
           </div>
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
@@ -314,10 +311,10 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto mb-10 max-w-2xl text-center">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Why learn with UDAN Technology
+            {c.why_title}
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Built for Nepali learners — affordable, practical, and trustworthy.
+            {c.why_subtitle}
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -341,10 +338,10 @@ export default async function HomePage() {
           <div className="mx-auto mb-10 max-w-2xl text-center">
             <Badge variant="secondary" className="mb-3">Membership</Badge>
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Learn everything, one membership
+              {c.membership_title}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Get access to membership courses and all new content during your plan.
+              {c.membership_subtitle}
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -359,10 +356,10 @@ export default async function HomePage() {
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto mb-10 max-w-2xl text-center">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Loved by students
+            {c.reviews_title}
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Real results from real learners across Nepal.
+            {c.reviews_subtitle}
           </p>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -396,10 +393,10 @@ export default async function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto mb-10 max-w-2xl text-center">
             <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-              Learn from experienced instructors
+              {c.instructors_title}
             </h2>
             <p className="mt-2 text-muted-foreground">
-              Industry professionals who&apos;ve done the work.
+              {c.instructors_subtitle}
             </p>
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -430,10 +427,10 @@ export default async function HomePage() {
       <section className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="mb-10 text-center">
           <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
-            Frequently asked questions
+            {c.faq_title}
           </h2>
           <p className="mt-2 text-muted-foreground">
-            Everything you need to know to get started.
+            {c.faq_subtitle}
           </p>
         </div>
         <Accordion type="single" collapsible className="w-full">
@@ -454,15 +451,12 @@ export default async function HomePage() {
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.15),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(255,255,255,0.1),transparent_40%)]" />
           <div className="relative mx-auto max-w-2xl space-y-6">
             <h2 className="text-3xl font-bold sm:text-4xl">
-              Ready to start learning?
+              {c.cta_heading}
             </h2>
-            <p className="text-primary-foreground/90">
-              Join thousands of Nepali learners building real skills. Create your
-              free account today.
-            </p>
+            <p className="text-primary-foreground/90">{c.cta_text}</p>
             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Button asChild size="lg" variant="secondary">
-                <Link href="/register">Create free account</Link>
+                <Link href="/register">{c.cta_button_primary}</Link>
               </Button>
               <Button
                 asChild
@@ -470,7 +464,7 @@ export default async function HomePage() {
                 variant="outline"
                 className="border-primary-foreground/30 bg-transparent text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground"
               >
-                <Link href="/courses">Browse courses</Link>
+                <Link href="/courses">{c.cta_button_secondary}</Link>
               </Button>
             </div>
           </div>

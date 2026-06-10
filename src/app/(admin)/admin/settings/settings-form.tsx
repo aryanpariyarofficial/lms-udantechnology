@@ -73,22 +73,6 @@ export function SettingsForm({ settings }: { settings: SiteSettings }) {
 
       <Card>
         <CardHeader>
-          <h2 className="font-semibold">Homepage hero</h2>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="hero_heading">Heading</Label>
-            <Input id="hero_heading" name="hero_heading" defaultValue={settings.hero_heading} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="hero_subheading">Subheading</Label>
-            <Textarea id="hero_subheading" name="hero_subheading" rows={2} defaultValue={settings.hero_subheading} />
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
           <h2 className="font-semibold">Social links</h2>
         </CardHeader>
         <CardContent className="grid gap-4 sm:grid-cols-3">

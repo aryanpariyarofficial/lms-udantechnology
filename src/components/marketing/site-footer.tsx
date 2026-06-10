@@ -18,6 +18,7 @@ const FOOTER_LINKS = {
     { label: "Tools", href: "/tools" },
   ],
   Resources: [
+    { label: "About", href: "/about" },
     { label: "Membership", href: "/membership" },
     { label: "Blog", href: "/blog" },
     { label: "Verify Certificate", href: "/verify" },

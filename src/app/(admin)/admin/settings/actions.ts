@@ -15,7 +15,6 @@ export async function updateSettings(formData: FormData): Promise<Result> {
 
   const rows = [
     { key: "site", value: { tagline: get("tagline"), support_email: get("support_email") } },
-    { key: "hero", value: { heading: get("hero_heading"), subheading: get("hero_subheading") } },
     {
       key: "socials",
       value: { facebook: get("facebook"), instagram: get("instagram"), youtube: get("youtube") },
